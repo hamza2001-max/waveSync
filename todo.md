@@ -1,0 +1,77 @@
+--Todo
+- [x] create a modal.
+- [ ] complete ContactManager.
+- [ ] complete user form.
+- [ ] archive contact.
+- [ ] leave and rejoin grp calls.
+- [ ] One time view photo sending.
+- [ ] voice message.
+- [ ] pin messages.
+- [ ] video message.
+- [ ] music sharing.
+- [ ] Read Receipts.
+- [ ] message scheduling and user availability mode.
+- [ ] Customizable Themes.
+- [ ] Notification Customization.
+- [ ] Search Functionality [messages and contacts]
+- [ ] end to end encryption.
+- [ ] group chats.
+- [ ] group polls.
+- [ ] group thread.
+- [ ] group moderator.
+- [ ] @mention included.
+- [ ] voice call.
+- [ ] video call.
+- [ ] location sharing.
+- [ ] reaction to messages [emoji, giphs].
+- [ ] language translation.
+- [ ] file [image, text, video etc] sharing.
+- [ ] user profile.
+- [ ] Blocking and Reporting.
+- [ ] user status.
+- [ ] user stories.
+- [ ] user streaks.
+- [ ] user camera filters.
+- [ ] user live streaming.
+- [ ] AI chatbot.
+- [ ] AI chat assistance.
+- [ ] personal chats.
+- [ ] professional chats.
+- [ ] broadcast.
+
+
+-- Tech
+- [ ] MERN
+- [ ] react-query
+- [ ] zustand
+- [ ] testing library
+- [ ] tailwind with that one yt support
+- [ ] typescript
+- [ ] D3.js
+- [ ] data visulalization?
+- [ ] animations (hooks or libraries)
+- [ ] typeface.js?
+- [ ] Animate On Scroll (AOS)
+- [ ] parallax websites
+- [ ] env-cmd
+- [ ] socket.io
+- [ ] zod
+- [ ] Tauri
+
+-- Try
+- [ ] web worker.
+- [ ] Third party API
+- [ ] Proxy Server Project
+- [ ] web crawler.
+- [ ] implement gpt in a website.
+- [ ] cookies and session.
+- [ ] Social Media Analytics Dashboard
+- [ ] caching 
+- [ ] File Sharing and Cloud Storage
+- [ ] HTTP (Hypertext Transfer Protocol)
+- [ ] Session Management and Cookies
+- [ ] Middleware
+- [ ] Testing
+- [ ] WebSockets(live chat, notifications, and real-time updates)
+- [ ] API Authentication Methods
+- [ ] Microservices 
