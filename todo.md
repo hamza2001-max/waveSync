@@ -1,6 +1,12 @@
---Todo
+--Current
+- [x] complete ContactManager frontend.
+- [ ] complete ContactManager backend.
+- [ ] fix the menu button.
+- [ ] start applying dark mode.
+- [ ] start applying animation through react animate or other means.
+
+--Tasks
 - [x] create a modal.
-- [ ] complete ContactManager.
 - [ ] complete user form.
 - [ ] archive contact.
 - [ ] leave and rejoin grp calls.
@@ -41,12 +47,14 @@
 
 
 -- Tech
-- [ ] MERN
+- [ ] react
+- [ ] prisma
 - [ ] react-query
 - [ ] zustand
 - [ ] testing library
-- [ ] tailwind with that one yt support
-- [ ] typescript
+- [x] apply cn.
+- [x] typescript
+- [x] tailwind
 - [ ] D3.js
 - [ ] data visulalization?
 - [ ] animations (hooks or libraries)
@@ -57,6 +65,7 @@
 - [ ] socket.io
 - [ ] zod
 - [ ] Tauri
+- [ ] Socket.io
 
 -- Try
 - [ ] web worker.

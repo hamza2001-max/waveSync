@@ -33,6 +33,17 @@
 
   .dark {
     --color-primary: #fff;
-    --color-secondary: #023047;
+    --color-secondary: #000;
+  }
+
+  .dark .btn-effect {
+    background-color: #fff;
+    color: #000;
+    transition: all 300ms;
+  }
+
+  .dark .btn-effect:hover {
+    background-color: #000;
+    color: #fff;
   }
 }

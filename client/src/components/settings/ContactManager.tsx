@@ -31,7 +31,7 @@ export const ContactManager = () => {
           <div className="flex flex-col items-center justify-center space-y-2">
             <label htmlFor="imgInput"
               className={cn("cursor-pointer text-3xl h-24 w-24 flex flex-col space-y-2 justify-center items-center", {
-                "border-[1.5px] border-black rounded-full": !imgPreview
+                "border-[1.5px] border-primary rounded-full": !imgPreview
               })}>
               {imgPreview ? <img
                 src={imgPreview as string}
