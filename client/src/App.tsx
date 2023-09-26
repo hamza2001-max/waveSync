@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Navigation } from "./components/include/Navigation";
-import { Home } from "./pages/Home";
+// import { Home } from "./pages/Home";
 import { Landing } from "./pages/Landing";
 
 function App() {

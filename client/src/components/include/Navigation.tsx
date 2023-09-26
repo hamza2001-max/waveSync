@@ -2,13 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { FiMoreVertical } from "react-icons/fi";
 import { ContactManager } from "../settings/ContactManager";
 export const Navigation = () => {
-  const [menuVisible, setMenuVisible] = useState(false);
-  const menuRef = useRef<HTMLDivElement | null>(null);
+  const [listVisible, setListVisible] = useState(false);
+  const listRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const closeMenu = (e: MouseEvent) => {
-      if (!menuRef.current?.contains(e.target as Node)) {
-        setMenuVisible(false);
+      if (!listRef.current?.contains(e.target as Node)) {
+        setListVisible(false);
       }
     }
     document.addEventListener('mousedown', closeMenu);
@@ -23,12 +23,12 @@ export const Navigation = () => {
       <div className="relative"
       >
         <button onClick={() => {
-          setMenuVisible(prev => !prev);
+          setListVisible(prev => !prev);
         }}><FiMoreVertical /></button>
         {
-          menuVisible && (
+          listVisible && (
             <div
-              ref={menuRef}
+              ref={listRef}
               className="absolute right-0 whitespace-nowrap">
               <ContactManager />
             </div>

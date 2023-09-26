@@ -1,8 +1,5 @@
-import React, { useState } from 'react';
-interface IModal {
-  title: string;
-  children: React.ReactNode;
-}
+import { IModal } from '../../typescript/includeTypes'
+import { useState } from 'react';
 
 const Modal = ({ title, children }: IModal) => {
   const [modalState, setModalState] = useState(false);
