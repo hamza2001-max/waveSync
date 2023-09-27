@@ -18,7 +18,7 @@ export const Landing = () => {
                     sequi quisquam reiciendis at, possimus accusantium earum
                     quasi nemo aperiam, impedit iusto vero! Accusantium.
                 </Accordian>
-                <Accordian title="Features">
+                <Accordian title="Contact Us">
                     Lorem, ipsum dolor sit amet consectetur adipisicing elit.
                     Dolores harum alias aspernatur tempora placeat, eos quibusdam
                     sequi quisquam reiciendis at, possimus accusantium earum

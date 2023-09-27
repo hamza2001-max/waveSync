@@ -25,7 +25,7 @@ export const ContactManager = () => {
       <form action="" className="space-y-5 py-8 px-7">
         <div className="flex justify-between items-center">
           <h2 className="text-lg font-semibold">Create Contacts</h2>
-          <button className="font-semibold border-[1.5px] border-primary px-4 py-1 rounded-full btn-effect">Save</button>
+          <button className="font-semibold border-[1.5px] border-primary px-4 py-1 rounded-full inverse">Save</button>
         </div>
         <div className="flex flex-col items-center space-y-7">
           <div className="flex flex-col items-center justify-center space-y-2">
