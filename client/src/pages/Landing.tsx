@@ -15,8 +15,8 @@ export const Landing = () => {
 
     return (
         <section className="md:flex md:flex-col-reverse md:items-center">
-            <h1 className="text-6xl md:text-7xl lg:text-8xl text-center mb-5 md:mb-0 md:mt-10">Connect and Interact</h1>
-            <div className="md:w-[45rem] lg:w-[48rem] md:flex justify-between items-center sm:mt-12 md:mt-10">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl text-center mb-5 md:mb-0 sm:mt-8">Connect and Interact</h1>
+            <div className="md:w-[45rem] lg:w-[48rem] md:flex justify-between items-center sm:mt-12 md:mt-16">
                 <Authorization />
                 <div className="flex flex-col items-center space-y-3">
                     {accordianData.map(node => {

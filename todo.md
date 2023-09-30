@@ -1,8 +1,13 @@
 --Current
 - [x] complete ContactManager frontend.
 - [ ] complete ContactManager backend.
-- [ ] fix the menu button.
-- [ ] start applying dark mode.
+- [ ] complete Authorization backend.
+- [x] fix the menu button.
+- [x] start applying dark mode.
+- [x] complete Landing.tsx.
+- [x] complete Accordian.tsx.
+- [ ] fix the dark mode of ContactManager.tsx.
+- [ ] apply aimation to ContactManager.tsx.
 - [ ] start applying animation through react animate or other means.
 
 --Tasks
