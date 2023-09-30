@@ -5,5 +5,7 @@ export interface IModal {
 
 export interface IAccordian {
   title: string;
+  bodyVisible: boolean;
+  onClick: () => void
   children: React.ReactNode;
 }

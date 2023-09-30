@@ -1,30 +1,36 @@
-import { Accordian } from "../components/include/Accordian"
+import { useState } from "react";
+import { Accordion } from "../components/include/Accordion"
 import { Authorization } from "../components/landing/Authorization"
+import { accordianData } from "../data/AccordianData";
 
 export const Landing = () => {
+    const [activeAccordion, setActiveAccordion] = useState<number | null>(null);
+    const handleActiveAccordion = (index: number) => {
+        setActiveAccordion((prev) => {
+            const valuesToCheck = [null, ...accordianData.map(prop => prop.id)];
+            const elementExists = valuesToCheck.filter(prev => prev !== index).some(value => prev === value);
+            return elementExists ? index : null;
+        });
+    }
+
     return (
-        <section
-            style={{
-                // "background": "linear-gradient(310deg, rgba(2,0,42,1) 0%, rgba(40,69,136,1) 38%, rgba(68,223,255,1) 100%)"
-            }}>
-            <div>
-                <h1 className="text-8xl">Connect and Interact</h1>
+        <section className="md:flex md:flex-col-reverse md:items-center">
+            <h1 className="text-6xl md:text-7xl lg:text-8xl text-center mb-5 md:mb-0 md:mt-10">Connect and Interact</h1>
+            <div className="md:w-[45rem] lg:w-[48rem] md:flex justify-between items-center sm:mt-12 md:mt-10">
                 <Authorization />
+                <div className="flex flex-col items-center space-y-3">
+                    {accordianData.map(node => {
+                        return (
+                            <Accordion
+                                onClick={() => handleActiveAccordion(node.id)}
+                                title={node.title}
+                                bodyVisible={activeAccordion === node.id}>
+                                {node.body}
+                            </Accordion>
+                        );
+                    })}
+                </div>
             </div>
-            <div className="space-y-3">
-                <Accordian title="Features">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                    Dolores harum alias aspernatur tempora placeat, eos quibusdam
-                    sequi quisquam reiciendis at, possimus accusantium earum
-                    quasi nemo aperiam, impedit iusto vero! Accusantium.
-                </Accordian>
-                <Accordian title="Contact Us">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                    Dolores harum alias aspernatur tempora placeat, eos quibusdam
-                    sequi quisquam reiciendis at, possimus accusantium earum
-                    quasi nemo aperiam, impedit iusto vero! Accusantium.
-                </Accordian>
-            </div>
-        </section>
+        </section >
     )
 }

@@ -1,6 +1,6 @@
 export const Authorization = () => {
     return (
-        <div className="flex flex-col items-center space-y-3 my-10">
+        <div className="flex flex-col items-center space-y-3 mb-10">
             <h2 className="w-[20rem] text-xl font-semibold">Join Us.</h2>
             <div className="w-[20rem] text-xl flex flex-col items-center space-y-3">
                 <button className="w-full py-[0.6rem] border-[1px] border-primary rounded-3xl">Sign up</button>
