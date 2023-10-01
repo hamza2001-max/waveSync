@@ -9,6 +9,7 @@
 - [ ] fix the dark mode of ContactManager.tsx.
 - [ ] apply aimation to ContactManager.tsx.
 - [ ] start applying animation through react animate or other means.
+- [x] apply zustand.
 
 --Tasks
 - [x] create a modal.

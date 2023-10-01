@@ -21,7 +21,7 @@ export const ContactManager = () => {
   }
 
   return (
-    <Modal title={"Create Contacts"}>
+    <Modal clickable={"Create Contacts"}>
       <form action="" className="space-y-5 py-8 px-7">
         <div className="flex justify-between items-center">
           <h2 className="text-lg font-semibold">Create Contacts</h2>

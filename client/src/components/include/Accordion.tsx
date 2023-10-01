@@ -8,7 +8,7 @@ export const Accordion = ({ title, children, bodyVisible, onClick }: IAccordian)
             { "space-y-2": bodyVisible })}>
             <div className="group flex justify-between items-center cursor-pointer px-5 py-3"
                 onClick={() => { onClick(); }}>
-                <h3 className="text-2xl">{title}</h3>
+                <h3 className="text-xl">{title}</h3>
                 <FaAngleDown className={cn("group-hover:-translate-y-1 transition-all duration-300",
                     { "rotate-180": bodyVisible })} />
             </div>

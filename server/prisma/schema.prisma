@@ -11,6 +11,19 @@ datasource db {
 }
 
 model User {
-  id   Int    @id @default(autoincrement())
-  name String
+  userId     Int      @id @default(autoincrement())
+  fullName   String
+  userName   String   @unique
+  email      String   @unique
+  password   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  Role       Role[]
+  roleRoleId Int?
+}
+
+model Role {
+  roleId Int    @id @default(autoincrement())
+  name   String @unique @default("user")
+  users  User[]
 }

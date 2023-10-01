@@ -1,5 +1,6 @@
 export interface IModal {
-  title: string;
+  clickable: string;
+  className?: string;
   children: React.ReactNode;
 }
 
