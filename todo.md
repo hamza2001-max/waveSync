@@ -1,3 +1,8 @@
+express
+passport.js
+sessions
+multer
+
 --Current
 - [x] complete ContactManager frontend.
 - [ ] complete ContactManager backend.
@@ -61,6 +66,9 @@
 - [x] apply cn.
 - [x] typescript
 - [x] tailwind
+- [ ] express
+- [ ] multer
+- [ ] passport
 - [ ] D3.js
 - [ ] data visulalization?
 - [ ] animations (hooks or libraries)

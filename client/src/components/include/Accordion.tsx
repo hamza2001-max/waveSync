@@ -1,4 +1,4 @@
-import { IAccordian } from "../../typescript/includeTypes"
+import { IAccordian } from "../../types"
 import { FaAngleDown } from "react-icons/fa6"
 import { cn } from "../../utils/cn";
 

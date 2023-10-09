@@ -1,4 +1,4 @@
-import { IModal } from '../../typescript/includeTypes'
+import { IModal } from '../../types'
 import { useState } from 'react';
 
 const Modal = ({ clickable, children, className }: IModal) => {

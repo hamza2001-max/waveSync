@@ -19,9 +19,10 @@ export const Landing = () => {
             <div className="md:w-[45rem] lg:w-[48rem] md:flex justify-between items-center sm:mt-12 md:mt-16">
                 <Authorization />
                 <div className="flex flex-col items-center space-y-3">
-                    {accordianData.map(node => {
+                    {accordianData.map((node, key) => {
                         return (
                             <Accordion
+                                key={key}
                                 onClick={() => handleActiveAccordion(node.id)}
                                 title={node.title}
                                 bodyVisible={activeAccordion === node.id}>
