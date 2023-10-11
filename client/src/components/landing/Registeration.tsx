@@ -2,12 +2,12 @@ import { BsFillEyeSlashFill, BsFillEyeFill } from "react-icons/bs";
 import { BiSolidUserAccount } from "react-icons/bi";
 import { ChangeEvent, useState } from "react";
 import { MdOutlineEmail } from "react-icons/md";
-import { useQuery } from "react-query";
 import { PiPassword } from "react-icons/pi";
 import { cn } from "../../utils/cn";
 import { AiOutlineUser } from "react-icons/ai";
 import { RiImageAddLine } from "react-icons/ri";
 import { FiTrash2 } from "react-icons/fi";
+import { useMutation } from "react-query";
 import Modal from "../include/Modal"
 import axios from "axios";
 
@@ -15,7 +15,7 @@ export const Registeration = () => {
     const [hidePassword, setHidePassword] = useState(true);
     const [imgPreview, setImgPreview] = useState<string | null>(null);
     const [formData, setFormData] = useState({
-        profileImage: "",
+        profileImage: new File([], ''),
         fullName: "",
         userName: "",
         email: "",
@@ -24,7 +24,7 @@ export const Registeration = () => {
 
     const handleImgPreview = (e: ChangeEvent<HTMLInputElement>) => {
         const imageFile = e.target.files?.[0];
-        setFormData({ ...formData, profileImage: imageFile?.name as string })
+        setFormData({ ...formData, profileImage: imageFile as File })
         if (imageFile) {
             const imageReader = new FileReader();
             imageReader.onload = (e) => {
@@ -34,15 +34,35 @@ export const Registeration = () => {
         }
     }
 
+    const mutationFn = async () => {
+        try {
+            const fd = new FormData();
+            fd.append('profileImage', formData.profileImage); // The name 'profileImage' should match the field name used in the backend
+            fd.append('fullName', formData.fullName);
+            fd.append('userName', formData.userName);
+            fd.append('email', formData.email);
+            fd.append('password', formData.password);
+            await axios.post("http://localhost:7000/user/register", fd, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                }
+            }).then((response) => {
+                console.log(response.data);
+            })
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
+    const { mutate, isError, error, isLoading } = useMutation({
+        onMutate: mutationFn
+    })
+
     const handleSubmition = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const { } = useQuery("user", async () => {
-            try {
-                axios.post("http://localhost:7000/user/register", formData);
-            } catch (error) {
-
-            }
-        })
+        mutate();
+        // isError && console.log(error);
+        // isLoading && console.log("loading");
     }
 
     return (
@@ -95,7 +115,7 @@ export const Registeration = () => {
                     <label htmlFor="password" className="cursor-pointer text-xl flex"><PiPassword className={"mr-2"} /></label>
                     <div className="relative">
                         <input id="password" type={hidePassword ? "password" : "text"} className="px-2 py-2 bg-secondary"
-                            placeholder="Password" onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
+                            name="profileImage" placeholder="Password" onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
                         <span className="cursor-pointer absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2"
                             onClick={() => setHidePassword(prev => !prev)}>{hidePassword ? <BsFillEyeSlashFill /> : <BsFillEyeFill />}</span>
                     </div>
