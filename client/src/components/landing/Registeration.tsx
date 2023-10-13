@@ -14,17 +14,35 @@ import axios from "axios";
 export const Registeration = () => {
     const [hidePassword, setHidePassword] = useState(true);
     const [imgPreview, setImgPreview] = useState<string | null>(null);
-    const [formData, setFormData] = useState({
+    const [formFields, setFormFields] = useState({
         profileImage: new File([], ''),
-        fullName: "",
-        userName: "",
+        fullname: "",
+        username: "",
         email: "",
         password: ""
+    });
+    const [formError, setFormErrors] = useState({
+        fullname: {
+            status: false,
+            reason: ""
+        },
+        username: {
+            status: false,
+            reason: ""
+        },
+        email: {
+            status: false,
+            reason: ""
+        },
+        password: {
+            status: false,
+            reason: ""
+        }
     });
 
     const handleImgPreview = (e: ChangeEvent<HTMLInputElement>) => {
         const imageFile = e.target.files?.[0];
-        setFormData({ ...formData, profileImage: imageFile as File })
+        setFormFields({ ...formFields, profileImage: imageFile as File })
         if (imageFile) {
             const imageReader = new FileReader();
             imageReader.onload = (e) => {
@@ -34,42 +52,96 @@ export const Registeration = () => {
         }
     }
 
+
     const mutationFn = async () => {
         try {
+            console.log("mutationFn hamza")
             const fd = new FormData();
-            fd.append('profileImage', formData.profileImage); // The name 'profileImage' should match the field name used in the backend
-            fd.append('fullName', formData.fullName);
-            fd.append('userName', formData.userName);
-            fd.append('email', formData.email);
-            fd.append('password', formData.password);
+            formFields.profileImage.name && fd.append('profileImage', formFields.profileImage.name);
+            fd.append('fullname', formFields.fullname);
+            fd.append('username', formFields.username);
+            fd.append('email', formFields.email);
+            fd.append('password', formFields.password);
+            
             await axios.post("http://localhost:7000/user/register", fd, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 }
-            }).then((response) => {
-                console.log(response.data);
-            })
+            }).catch(error => {
+                console.log(error);
+            });
         } catch (error) {
             console.log(error);
-
         }
     }
-    const { mutate, isError, error, isLoading } = useMutation({
+
+    const { mutate, isLoading } = useMutation({
         onMutate: mutationFn
     })
 
+    const validateForm = () => {
+        const isPasswordValid = /^(?=.*[a-z])(?=.*[A-Z]).{4,}$/.test(formFields.password);
+        const isUsernameValid = formFields.username.split(" ").join("").length >= 4;
+        const isFullnameValid = formFields.fullname.split(" ").join("").length >= 4;
+        const isEmailValid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(formFields.email);
+        const errors = {
+            fullname: {
+                status: !formFields.fullname || !isFullnameValid,
+                reason: !formFields.fullname ? "Fill out the fullname field." : !isFullnameValid ? "Fullname length should be greater than 4." : ""
+            },
+            username: {
+                status: !formFields.username || !isUsernameValid,
+                reason: !formFields.username ? "Fill out the username field." : !isUsernameValid ? "Username length should be greater than 4." : ""
+            },
+            email: {
+                status: !formFields.email || !isEmailValid,
+                reason: !formFields.email ? "Fill out the email field." : !isEmailValid ? "Invalid email format." : ""
+            },
+            password: {
+                status: !formFields.password || !isPasswordValid,
+                reason: !formFields.password ? "Fill out the password field." : !isPasswordValid ? "Password must be at least 4 characters with at least one uppercase and one lowercase letter." : ""
+            },
+        };
+
+        return {
+            errors,
+            isValid: Object.values(errors).every((field) => !field.status),
+        };
+    }
+
     const handleSubmition = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        mutate();
-        // isError && console.log(error);
-        // isLoading && console.log("loading");
+        const { errors, isValid } = validateForm();
+        if (isValid) {
+            mutate();
+            setFormErrors({
+                fullname: {
+                    status: false,
+                    reason: ""
+                },
+                username: {
+                    status: false,
+                    reason: ""
+                },
+                email: {
+                    status: false,
+                    reason: ""
+                },
+                password: {
+                    status: false,
+                    reason: ""
+                }
+            });
+        } else {
+            setFormErrors(errors);
+        }
     }
 
     return (
         <Modal
             clickable="Create An Account"
             className="w-full py-[0.6rem] border-[1px] border-primary rounded-3xl inverse">
-            <form onSubmit={handleSubmition} className="flex flex-col items-center space-y-5 py-8 px-7">
+            <form onSubmit={handleSubmition} className="flex flex-col items-center space-y-4 py-8 px-7">
                 <h2 className="mb-3 font-semibold">Join Us By Creating An Account.</h2>
                 <div className="flex flex-col items-center justify-center space-y-2">
                     <label htmlFor="imgInput"
@@ -96,34 +168,47 @@ export const Registeration = () => {
                         ><FiTrash2 className={"mr-2"} />Remove</span>
                     }
                 </div>
-                <div className="flex items-center space-x-5">
-                    <label htmlFor="fName" className="cursor-pointer text-xl flex"><AiOutlineUser className={"mr-2"} /></label>
-                    <input id="fName" type="text" className="px-2 py-2 bg-secondary"
-                        placeholder="Full Name" onChange={(e) => setFormData({ ...formData, fullName: e.target.value })} />
-                </div>
-                <div className="flex items-center space-x-5">
-                    <label htmlFor="uName" className="cursor-pointer text-xl flex"><BiSolidUserAccount className={"mr-2"} /></label>
-                    <input id="uName" type="text" className="px-2 py-2 bg-secondary"
-                        placeholder="Username" onChange={(e) => setFormData({ ...formData, userName: e.target.value })} />
-                </div>
-                <div className="flex items-center space-x-5">
-                    <label htmlFor="email" className="cursor-pointer text-xl flex"><MdOutlineEmail className={"mr-2"} /></label>
-                    <input id="email" type="email" className="px-2 py-2 bg-secondary"
-                        placeholder="Email" onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
-                </div>
-                <div className="flex items-center space-x-5">
-                    <label htmlFor="password" className="cursor-pointer text-xl flex"><PiPassword className={"mr-2"} /></label>
-                    <div className="relative">
-                        <input id="password" type={hidePassword ? "password" : "text"} className="px-2 py-2 bg-secondary"
-                            name="profileImage" placeholder="Password" onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
-                        <span className="cursor-pointer absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2"
-                            onClick={() => setHidePassword(prev => !prev)}>{hidePassword ? <BsFillEyeSlashFill /> : <BsFillEyeFill />}</span>
+                <div>
+                    <div className="flex items-center space-x-5">
+                        <label htmlFor="fName" className="cursor-pointer text-xl flex"><AiOutlineUser className={"mr-2"} /></label>
+                        <input id="fName" type="text" className="px-2 py-2 bg-secondary"
+                            placeholder="Full Name" onChange={(e) => setFormFields({ ...formFields, fullname: e.target.value })} />
                     </div>
+                    {formError.fullname.status && <p className="text-sm ml-12 mt-1 text-red-500">{formError.fullname.reason}</p>}
                 </div>
-                <button type="submit" className="w-[18rem] py-[0.5rem] border-[1.5px] border-primary rounded-3xl inverse"
+                <div>
+                    <div className="flex items-center space-x-5">
+                        <label htmlFor="uName" className="cursor-pointer text-xl flex"><BiSolidUserAccount className={"mr-2"} /></label>
+                        <input id="uName" type="text" className="px-2 py-2 bg-secondary"
+                            placeholder="Username" onChange={(e) => setFormFields({ ...formFields, username: e.target.value })} />
+
+                    </div>
+                    {formError.username.status && <p className="text-sm ml-12 mt-1 text-red-500">{formError.username.reason}</p>}
+                </div>
+                <div>
+                    <div className="flex items-center space-x-5">
+                        <label htmlFor="email" className="cursor-pointer text-xl flex"><MdOutlineEmail className={"mr-2"} /></label>
+                        <input id="email" type="email" className="px-2 py-2 bg-secondary"
+                            placeholder="Email" onChange={(e) => setFormFields({ ...formFields, email: e.target.value })} />
+                    </div>
+                    {formError.email.status && <p className="text-sm ml-12 mt-1 text-red-500">{formError.email.reason}</p>}
+                </div>
+                <div>
+                    <div className="flex items-center space-x-5">
+                        <label htmlFor="password" className="cursor-pointer text-xl flex"><PiPassword className={"mr-2"} /></label>
+                        <div className="relative">
+                            <input id="password" type={hidePassword ? "password" : "text"} className="px-2 py-2 bg-secondary"
+                                name="profileImage" placeholder="Password" onChange={(e) => setFormFields({ ...formFields, password: e.target.value })} />
+                            <span className="cursor-pointer absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2"
+                                onClick={() => setHidePassword(prev => !prev)}>{hidePassword ? <BsFillEyeSlashFill /> : <BsFillEyeFill />}</span>
+                        </div>
+                    </div>
+                    {formError.password.status && <p className="text-sm ml-12 mt-1 text-red-500 w-60 ">{formError.password.reason}</p>}
+                </div>
+                <button type="submit" className="w-[16rem] py-[0.5rem] border-[1.5px] border-primary rounded-3xl inverse"
                     style={{
-                        marginTop: "1.5rem"
-                    }}>Create An Account</button>
+                        marginTop: "1.2rem"
+                    }}>{isLoading ? "..." : "Submit"}</button>
             </form>
         </Modal>
     )
