@@ -9,7 +9,7 @@ import { RiImageAddLine } from "react-icons/ri";
 import { FiTrash2 } from "react-icons/fi";
 import { useMutation } from "react-query";
 import Modal from "../include/Modal"
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 export const Registeration = () => {
     const [hidePassword, setHidePassword] = useState(true);
@@ -22,23 +22,12 @@ export const Registeration = () => {
         password: ""
     });
     const [formError, setFormErrors] = useState({
-        fullname: {
-            status: false,
-            reason: ""
-        },
-        username: {
-            status: false,
-            reason: ""
-        },
-        email: {
-            status: false,
-            reason: ""
-        },
-        password: {
-            status: false,
-            reason: ""
-        }
+        fullname: { status: false, reason: "" },
+        username: { status: false, reason: "" },
+        email: { status: false, reason: "" },
+        password: { status: false, reason: "" }
     });
+    const [serverError, setServerError] = useState("");
 
     const handleImgPreview = (e: ChangeEvent<HTMLInputElement>) => {
         const imageFile = e.target.files?.[0];
@@ -52,31 +41,62 @@ export const Registeration = () => {
         }
     }
 
+    // const mutationFn = async () => {
+    //     try {
+    //         const formdata = new FormData();
+    //         formFields.profileImage.name && formdata.append('profileImage', formFields.profileImage);
+    //         formdata.append('fullname', formFields.fullname);
+    //         formdata.append('username', formFields.username);
+    //         formdata.append('email', formFields.email);
+    //         formdata.append('password', formFields.password);
 
-    const mutationFn = async () => {
-        try {
-            console.log("mutationFn hamza")
-            const fd = new FormData();
-            formFields.profileImage.name && fd.append('profileImage', formFields.profileImage.name);
-            fd.append('fullname', formFields.fullname);
-            fd.append('username', formFields.username);
-            fd.append('email', formFields.email);
-            fd.append('password', formFields.password);
-            
-            await axios.post("http://localhost:7000/user/register", fd, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                }
-            }).catch(error => {
-                console.log(error);
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    //         const response = await axios.post("http://localhost:7000/user/register", formdata, {
+    //             headers: {
+    //                 "Content-Type": formFields.profileImage.name ? "multipart/form-data" : "text/html",
+    //             }
+    //         }).catch(error => {
+    //             console.log(error + " occured in axios catch");
+    //         });
+
+    //         console.log(response);
+
+    //     } catch (error) {
+    //         console.log(error + " occured in mutationFn catch");
+    //     }
+    // }
 
     const { mutate, isLoading } = useMutation({
-        onMutate: mutationFn
+        mutationFn: async () => {
+            try {
+                const formdata = new FormData();
+                formFields.profileImage.name && formdata.append('profileImage', formFields.profileImage);
+                formdata.append('fullname', formFields.fullname);
+                formdata.append('username', formFields.username);
+                formdata.append('email', formFields.email);
+                formdata.append('password', formFields.password);
+
+                const response = await axios.post("http://localhost:7000/user/register", formdata, {
+                    headers: {
+                        "Content-Type": formFields.profileImage.name ? "multipart/form-data" : "text/html",
+                    }
+                }).catch((error: AxiosError) => {
+                    const errorMessage = error.response?.data as { message: string };
+                    errorMessage && setServerError(errorMessage.message);
+                });
+                console.log(response);
+
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        onSuccess: () => {
+            console.log("success");
+
+        }, onError: () => {
+            console.log("error");
+
+        },
+
     })
 
     const validateForm = () => {
@@ -115,22 +135,10 @@ export const Registeration = () => {
         if (isValid) {
             mutate();
             setFormErrors({
-                fullname: {
-                    status: false,
-                    reason: ""
-                },
-                username: {
-                    status: false,
-                    reason: ""
-                },
-                email: {
-                    status: false,
-                    reason: ""
-                },
-                password: {
-                    status: false,
-                    reason: ""
-                }
+                fullname: { status: false, reason: "" },
+                username: { status: false, reason: "" },
+                email: { status: false, reason: "" },
+                password: { status: false, reason: "" }
             });
         } else {
             setFormErrors(errors);
@@ -159,6 +167,7 @@ export const Registeration = () => {
                         type="file"
                         id="imgInput"
                         className="hidden"
+                        name="profileImage"
                         accept="image/*"
                         onChange={handleImgPreview} />
                     {!imgPreview ? <label className="cursor-pointer text-lg font-semibold" htmlFor="imgInput">Profile Picture</label> :
@@ -198,14 +207,16 @@ export const Registeration = () => {
                         <label htmlFor="password" className="cursor-pointer text-xl flex"><PiPassword className={"mr-2"} /></label>
                         <div className="relative">
                             <input id="password" type={hidePassword ? "password" : "text"} className="px-2 py-2 bg-secondary"
-                                name="profileImage" placeholder="Password" onChange={(e) => setFormFields({ ...formFields, password: e.target.value })} />
+                                placeholder="Password" onChange={(e) => setFormFields({ ...formFields, password: e.target.value })} />
                             <span className="cursor-pointer absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2"
                                 onClick={() => setHidePassword(prev => !prev)}>{hidePassword ? <BsFillEyeSlashFill /> : <BsFillEyeFill />}</span>
                         </div>
                     </div>
-                    {formError.password.status && <p className="text-sm ml-12 mt-1 text-red-500 w-60 ">{formError.password.reason}</p>}
+                    {formError.password.status && <p className="text-sm ml-12 mt-1 text-red-500 w-60">{formError.password.reason}</p>}
                 </div>
-                <button type="submit" className="w-[16rem] py-[0.5rem] border-[1.5px] border-primary rounded-3xl inverse"
+
+                {serverError && <p className="text-sm ml-12 mt-1 text-red-500 w-60">{serverError}</p>}
+                <button type="submit" className="w-[19rem] py-[0.5rem] border-[1.5px] border-primary rounded-3xl inverse"
                     style={{
                         marginTop: "1.2rem"
                     }}>{isLoading ? "..." : "Submit"}</button>

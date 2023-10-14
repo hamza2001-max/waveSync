@@ -1,9 +1,19 @@
+- commands for prisma changes.
+  [1] npx prisma migrate dev - This command creates and applies migrations. It's used to propagate the changes you made in your schema to your database. If you do not provide a --name, Prisma CLI will prompt you for a name. This command also creates a ./prisma/migrations folder with your initial migration and a table named \_prisma_migrations in the database with an entry for the first migration.
+  [2] npx prisma generate - This command generates Prisma Client based on your updated schema. This is necessary to ensure that the Prisma Client API is up-to-date with the latest changes in your schema.
+
 express
 passport.js
 sessions
 multer
 
+include role into register.
+image still gets sent.
+fix the background screen on landing.tsx in dark mode.
+handle serverError useState();
+
 --Current
+
 - [x] complete ContactManager frontend.
 - [ ] complete ContactManager backend.
 - [ ] complete Authorization backend.
@@ -17,6 +27,7 @@ multer
 - [x] apply zustand.
 
 --Tasks
+
 - [x] create a modal.
 - [ ] complete user form.
 - [ ] archive contact.
@@ -56,8 +67,8 @@ multer
 - [ ] professional chats.
 - [ ] broadcast.
 
-
 -- Tech
+
 - [ ] react
 - [ ] prisma
 - [ ] react-query
@@ -82,6 +93,7 @@ multer
 - [ ] Socket.io
 
 -- Try
+
 - [ ] web worker.
 - [ ] Third party API
 - [ ] Proxy Server Project
@@ -89,7 +101,7 @@ multer
 - [ ] implement gpt in a website.
 - [ ] cookies and session.
 - [ ] Social Media Analytics Dashboard
-- [ ] caching 
+- [ ] caching
 - [ ] File Sharing and Cloud Storage
 - [ ] HTTP (Hypertext Transfer Protocol)
 - [ ] Session Management and Cookies
@@ -97,4 +109,4 @@ multer
 - [ ] Testing
 - [ ] WebSockets(live chat, notifications, and real-time updates)
 - [ ] API Authentication Methods
-- [ ] Microservices 
+- [ ] Microservices
