@@ -1,7 +1,6 @@
 import { AiOutlineUser, AiOutlineSmile } from "react-icons/ai";
 import { MdOutlineEmail } from "react-icons/md";
 import Modal from "../include/Modal";
-import { ImgPreview } from "../include/imgPreview";
 
 export const ContactManager = () => {
   return (
@@ -12,7 +11,7 @@ export const ContactManager = () => {
           <button className="font-semibold border-[1.5px] border-primary px-4 py-1 rounded-full inverse">Save</button>
         </div>
         <div className="flex flex-col items-center space-y-7">
-          <ImgPreview />
+          {/* <ImgPreview /> */}
           <div className="space-y-3">
             <div className="flex justify-between items-center space-x-6">
               <label htmlFor="fName" className="text-xl flex"><AiOutlineUser className={"mr-2"} /><span className="text-red-500">*</span></label>

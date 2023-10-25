@@ -19,12 +19,11 @@ model User {
   password     String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  Role         Role[]
-  roleRoleId   Int?
+  roles        Role[]
 }
 
 model Role {
   roleId Int    @id @default(autoincrement())
-  name   String @unique @default("user")
+  name   String @default("client")
   users  User[]
 }

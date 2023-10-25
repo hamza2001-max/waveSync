@@ -30,6 +30,7 @@ export const Registeration = () => {
     const [serverError, setServerError] = useState("");
 
     const handleImgPreview = (e: ChangeEvent<HTMLInputElement>) => {
+        setImgPreview(null);
         const imageFile = e.target.files?.[0];
         setFormFields({ ...formFields, profileImage: imageFile as File })
         if (imageFile) {
@@ -41,6 +42,11 @@ export const Registeration = () => {
         }
     }
 
+
+    // useEffect(() => {
+    //     console.log(formFields.profileImage);
+
+    // }, [formFields.profileImage]);
     // const mutationFn = async () => {
     //     try {
     //         const formdata = new FormData();
@@ -84,14 +90,13 @@ export const Registeration = () => {
                     errorMessage && setServerError(errorMessage.message);
                 });
                 console.log(response);
-
+                response && setServerError("");
             } catch (error) {
                 console.log(error);
             }
         },
         onSuccess: () => {
             console.log("success");
-
         }, onError: () => {
             console.log("error");
 
@@ -173,7 +178,10 @@ export const Registeration = () => {
                     {!imgPreview ? <label className="cursor-pointer text-lg font-semibold" htmlFor="imgInput">Profile Picture</label> :
                         <span
                             className="text-sm font-semibold flex items-center cursor-pointer"
-                            onClick={() => setImgPreview(null)}
+                            onClick={() => {
+                                setImgPreview(null);
+                                setFormFields({ ...formFields, profileImage: new File([], '') })
+                            }}
                         ><FiTrash2 className={"mr-2"} />Remove</span>
                     }
                 </div>
