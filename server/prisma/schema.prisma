@@ -27,3 +27,10 @@ model Role {
   name   String @default("client")
   users  User[]
 }
+
+model LoginSession {
+  LoginSessionId Int      @id @default(autoincrement())
+  sid            String   @unique
+  sess           Json
+  expire         DateTime
+}

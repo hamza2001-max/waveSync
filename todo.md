@@ -13,36 +13,18 @@ sessions
 fix the background screen on landing.tsx in dark mode.
 animation for models.
 
-
-
 -- Things that should be dealt with later on.
+
 - [ ] In userRoute.ts, A function was created to send and delete all users and their data to client.
 
-
-
-
---Current
+--Fix
 
 - [ ] handle serverError useState();
-- [x] include role into register.
-- [x] image still gets sent.
-- [x] express with typescript.
-- [x] complete ContactManager frontend.
-- [ ] complete ContactManager backend.
-- [ ] complete Authorization backend.
-- [x] fix the menu button.
-- [x] start applying dark mode.
-- [x] complete Landing.tsx.
-- [x] complete Accordian.tsx.
 - [ ] fix the dark mode of ContactManager.tsx.
-- [ ] apply aimation to ContactManager.tsx.
-- [ ] start applying animation through react animate or other means.
-- [x] apply zustand.
+- [ ] fix the profileImage in userController.test.ts
 
 --Tasks
 
-- [x] create a modal.
-- [ ] complete user form.
 - [ ] archive contact.
 - [ ] leave and rejoin grp calls.
 - [ ] One time view photo sending.
@@ -56,11 +38,6 @@ animation for models.
 - [ ] Notification Customization.
 - [ ] Search Functionality [messages and contacts]
 - [ ] end to end encryption.
-- [ ] group chats.
-- [ ] group polls.
-- [ ] group thread.
-- [ ] group moderator.
-- [ ] @mention included.
 - [ ] voice call.
 - [ ] video call.
 - [ ] location sharing.
@@ -82,17 +59,19 @@ animation for models.
 
 -- Tech
 
-- [ ] react
-- [ ] prisma
-- [ ] react-query
-- [ ] zustand
-- [ ] testing library
+- [x] react
+- [x] prisma
+- [x] react-query
+- [x] zustand
+- [x] testing library
 - [x] apply cn.
 - [x] typescript
 - [x] tailwind
-- [ ] express
-- [ ] multer
-- [ ] passport
+- [x] express
+- [x] multer
+- [x] passport
+- [ ] jest
+- [ ] superTest
 - [ ] D3.js
 - [ ] data visulalization?
 - [ ] animations (hooks or libraries)
