@@ -1,6 +1,6 @@
 import { app } from "../index";
-import request from "supertest";
 import { prisma } from "../utils/client";
+import request from "supertest";
 
 jest.mock("bcrypt", () => ({
   genSalt: jest.fn(() => "mocked-salt"),
