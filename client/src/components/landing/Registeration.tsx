@@ -106,17 +106,17 @@ export const Registeration = () => {
 
     const validateForm = () => {
         const isPasswordValid = /^(?=.*[a-z])(?=.*[A-Z]).{4,}$/.test(formFields.password);
-        const isUsernameValid = formFields.username.split(" ").join("").length >= 4;
-        const isFullnameValid = formFields.fullname.split(" ").join("").length >= 4;
+        const isUsernameValid = formFields.username.split(" ").join("").length >= 4 && formFields.username.split(" ").join("").length <= 15;
+        const isFullnameValid = formFields.fullname.split(" ").join("").length >= 4 && formFields.fullname.split(" ").join("").length <= 15;
         const isEmailValid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(formFields.email);
         const errors = {
             fullname: {
                 status: !formFields.fullname || !isFullnameValid,
-                reason: !formFields.fullname ? "Fill out the fullname field." : !isFullnameValid ? "Fullname length should be greater than 4." : ""
+                reason: !formFields.fullname ? "Fill out the fullname field." : !isFullnameValid ? "Full Name is not of required length (4-15)." : ""
             },
             username: {
                 status: !formFields.username || !isUsernameValid,
-                reason: !formFields.username ? "Fill out the username field." : !isUsernameValid ? "Username length should be greater than 4." : ""
+                reason: !formFields.username ? "Fill out the username field." : !isUsernameValid ? "Username is not of required length (4-15)." : ""
             },
             email: {
                 status: !formFields.email || !isEmailValid,

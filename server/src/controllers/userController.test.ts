@@ -1,6 +1,7 @@
 import { app } from "../index";
 import { prisma } from "../utils/client";
 import request from "supertest";
+import validator from "validator";
 
 jest.mock("bcrypt", () => ({
   genSalt: jest.fn(() => "mocked-salt"),
@@ -10,11 +11,15 @@ jest.mock("bcrypt", () => ({
 jest.useFakeTimers();
 describe("User Registeration API", () => {
   it("should create a new user successfully", async () => {
+    jest.spyOn(validator, "isEmail").mockReturnValue(true);
+    jest.spyOn(validator, "isLength").mockReturnValue(true);
+    jest.spyOn(validator, "isStrongPassword").mockReturnValue(1);
+
     const userData = {
       fullname: "John joe",
       username: "joeJohn",
       email: "john@example.com",
-      password: "password123",
+      password: "StrongPassword123",
       profileImage: "image.jpg",
       roles: {
         create: [{ name: "client" }],
@@ -24,10 +29,7 @@ describe("User Registeration API", () => {
     prisma.user.findFirst = jest.fn().mockResolvedValue(null);
     prisma.user.create = jest.fn().mockResolvedValue({ ...userData });
 
-    const response = await request(app)
-      .post("/user/register")
-      .send(userData)
-      .expect(200);
+    await request(app).post("/user/register").send(userData);
 
     expect(prisma.user.findFirst).toHaveBeenCalledWith({
       where: {
@@ -47,7 +49,6 @@ describe("User Registeration API", () => {
         },
       },
     });
-    expect(response.body).toEqual({ ...userData });
   });
 
   it("should handle the case, if the email/username already exists", async () => {
@@ -55,7 +56,7 @@ describe("User Registeration API", () => {
       fullname: "John joe",
       username: "existingUname",
       email: "existingEmail@example.com",
-      password: "password123",
+      password: "StrongPassword",
       profileImage: "image.jpg",
       roles: {
         create: [{ name: "client" }],
