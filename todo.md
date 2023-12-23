@@ -14,3 +14,8 @@ animation for models.
 - [ ] handle serverError useState();
 - [ ] fix the dark mode of ContactManager.tsx.
 - [ ] fix the profileImage in userController.test.ts
+
+{
+"email":"user1@gmail.com",
+  "password": "ThePassword123$"
+}

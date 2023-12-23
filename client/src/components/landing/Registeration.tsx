@@ -14,14 +14,14 @@ import axios, { AxiosError } from "axios";
 export const Registeration = () => {
     const [hidePassword, setHidePassword] = useState(true);
     const [imgPreview, setImgPreview] = useState<string | null>(null);
-    const [formFields, setFormFields] = useState({
+    const [regFields, setRegFields] = useState({
         profileImage: new File([], ''),
         fullname: "",
         username: "",
         email: "",
         password: ""
     });
-    const [formError, setFormErrors] = useState({
+    const [regErrors, setRegErrors] = useState({
         fullname: { status: false, reason: "" },
         username: { status: false, reason: "" },
         email: { status: false, reason: "" },
@@ -32,7 +32,7 @@ export const Registeration = () => {
     const handleImgPreview = (e: ChangeEvent<HTMLInputElement>) => {
         setImgPreview(null);
         const imageFile = e.target.files?.[0];
-        setFormFields({ ...formFields, profileImage: imageFile as File })
+        setRegFields({ ...regFields, profileImage: imageFile as File })
         if (imageFile) {
             const imageReader = new FileReader();
             imageReader.onload = (e) => {
@@ -42,48 +42,18 @@ export const Registeration = () => {
         }
     }
 
-
-    // useEffect(() => {
-    //     console.log(formFields.profileImage);
-
-    // }, [formFields.profileImage]);
-    // const mutationFn = async () => {
-    //     try {
-    //         const formdata = new FormData();
-    //         formFields.profileImage.name && formdata.append('profileImage', formFields.profileImage);
-    //         formdata.append('fullname', formFields.fullname);
-    //         formdata.append('username', formFields.username);
-    //         formdata.append('email', formFields.email);
-    //         formdata.append('password', formFields.password);
-
-    //         const response = await axios.post("http://localhost:7000/user/register", formdata, {
-    //             headers: {
-    //                 "Content-Type": formFields.profileImage.name ? "multipart/form-data" : "text/html",
-    //             }
-    //         }).catch(error => {
-    //             console.log(error + " occured in axios catch");
-    //         });
-
-    //         console.log(response);
-
-    //     } catch (error) {
-    //         console.log(error + " occured in mutationFn catch");
-    //     }
-    // }
-
     const { mutate, isLoading } = useMutation({
         mutationFn: async () => {
             try {
                 const formdata = new FormData();
-                formFields.profileImage.name && formdata.append('profileImage', formFields.profileImage);
-                formdata.append('fullname', formFields.fullname);
-                formdata.append('username', formFields.username);
-                formdata.append('email', formFields.email);
-                formdata.append('password', formFields.password);
-
+                regFields.profileImage.name && formdata.append('profileImage', regFields.profileImage);
+                formdata.append('fullname', regFields.fullname);
+                formdata.append('username', regFields.username);
+                formdata.append('email', regFields.email);
+                formdata.append('password', regFields.password);
                 const response = await axios.post("http://localhost:7000/user/register", formdata, {
                     headers: {
-                        "Content-Type": formFields.profileImage.name ? "multipart/form-data" : "text/html",
+                        "Content-Type": regFields.profileImage.name ? "multipart/form-data" : "text/html",
                     }
                 }).catch((error: AxiosError) => {
                     const errorMessage = error.response?.data as { message: string };
@@ -92,39 +62,35 @@ export const Registeration = () => {
                 console.log(response);
                 response && setServerError("");
             } catch (error) {
-                console.log(error);
+                console.log(error, " in the try/catch block of registeration useMutation.");
             }
         },
-        onSuccess: () => {
-            console.log("success");
-        }, onError: () => {
-            console.log("error");
-
+        onError: () => {
+            console.log("error in the registeration useMutation.");
         },
-
-    })
+    });
 
     const validateForm = () => {
-        const isPasswordValid = /^(?=.*[a-z])(?=.*[A-Z]).{4,}$/.test(formFields.password);
-        const isUsernameValid = formFields.username.split(" ").join("").length >= 4 && formFields.username.split(" ").join("").length <= 15;
-        const isFullnameValid = formFields.fullname.split(" ").join("").length >= 4 && formFields.fullname.split(" ").join("").length <= 15;
-        const isEmailValid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(formFields.email);
+        const isPasswordValid = /^(?=.*[a-z])(?=.*[A-Z]).{4,}$/.test(regFields.password);
+        const isUsernameValid = regFields.username.split(" ").join("").length >= 4 && regFields.username.split(" ").join("").length <= 15;
+        const isFullnameValid = regFields.fullname.split(" ").join("").length >= 4 && regFields.fullname.split(" ").join("").length <= 15;
+        const isEmailValid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(regFields.email);
         const errors = {
             fullname: {
-                status: !formFields.fullname || !isFullnameValid,
-                reason: !formFields.fullname ? "Fill out the fullname field." : !isFullnameValid ? "Full Name is not of required length (4-15)." : ""
+                status: !regFields.fullname || !isFullnameValid,
+                reason: !regFields.fullname ? "Fill out the fullname field." : !isFullnameValid ? "Full Name is not of required length (4-15)." : ""
             },
             username: {
-                status: !formFields.username || !isUsernameValid,
-                reason: !formFields.username ? "Fill out the username field." : !isUsernameValid ? "Username is not of required length (4-15)." : ""
+                status: !regFields.username || !isUsernameValid,
+                reason: !regFields.username ? "Fill out the username field." : !isUsernameValid ? "Username is not of required length (4-15)." : ""
             },
             email: {
-                status: !formFields.email || !isEmailValid,
-                reason: !formFields.email ? "Fill out the email field." : !isEmailValid ? "Invalid email format." : ""
+                status: !regFields.email || !isEmailValid,
+                reason: !regFields.email ? "Fill out the email field." : !isEmailValid ? "Invalid email format." : ""
             },
             password: {
-                status: !formFields.password || !isPasswordValid,
-                reason: !formFields.password ? "Fill out the password field." : !isPasswordValid ? "Password must be at least 4 characters with at least one uppercase and one lowercase letter." : ""
+                status: !regFields.password || !isPasswordValid,
+                reason: !regFields.password ? "Fill out the password field." : !isPasswordValid ? "Password must be at least 4 characters with at least one uppercase and one lowercase letter." : ""
             },
         };
 
@@ -139,14 +105,14 @@ export const Registeration = () => {
         const { errors, isValid } = validateForm();
         if (isValid) {
             mutate();
-            setFormErrors({
+            setRegErrors({
                 fullname: { status: false, reason: "" },
                 username: { status: false, reason: "" },
                 email: { status: false, reason: "" },
                 password: { status: false, reason: "" }
             });
         } else {
-            setFormErrors(errors);
+            setRegErrors(errors);
         }
     }
 
@@ -180,7 +146,7 @@ export const Registeration = () => {
                             className="text-sm font-semibold flex items-center cursor-pointer"
                             onClick={() => {
                                 setImgPreview(null);
-                                setFormFields({ ...formFields, profileImage: new File([], '') })
+                                setRegFields({ ...regFields, profileImage: new File([], '') })
                             }}
                         ><FiTrash2 className={"mr-2"} />Remove</span>
                     }
@@ -189,38 +155,38 @@ export const Registeration = () => {
                     <div className="flex items-center space-x-5">
                         <label htmlFor="fName" className="cursor-pointer text-xl flex"><AiOutlineUser className={"mr-2"} /></label>
                         <input id="fName" type="text" className="px-2 py-2 bg-secondary"
-                            placeholder="Full Name" onChange={(e) => setFormFields({ ...formFields, fullname: e.target.value })} />
+                            placeholder="Full Name" onChange={(e) => setRegFields({ ...regFields, fullname: e.target.value })} />
                     </div>
-                    {formError.fullname.status && <p className="text-sm ml-12 mt-1 text-red-500">{formError.fullname.reason}</p>}
+                    {regErrors.fullname.status && <p className="text-sm ml-12 mt-1 text-red-500">{regErrors.fullname.reason}</p>}
                 </div>
                 <div>
                     <div className="flex items-center space-x-5">
                         <label htmlFor="uName" className="cursor-pointer text-xl flex"><BiSolidUserAccount className={"mr-2"} /></label>
                         <input id="uName" type="text" className="px-2 py-2 bg-secondary"
-                            placeholder="Username" onChange={(e) => setFormFields({ ...formFields, username: e.target.value })} />
+                            placeholder="Username" onChange={(e) => setRegFields({ ...regFields, username: e.target.value })} />
 
                     </div>
-                    {formError.username.status && <p className="text-sm ml-12 mt-1 text-red-500">{formError.username.reason}</p>}
+                    {regErrors.username.status && <p className="text-sm ml-12 mt-1 text-red-500">{regErrors.username.reason}</p>}
                 </div>
                 <div>
                     <div className="flex items-center space-x-5">
                         <label htmlFor="email" className="cursor-pointer text-xl flex"><MdOutlineEmail className={"mr-2"} /></label>
                         <input id="email" type="email" className="px-2 py-2 bg-secondary"
-                            placeholder="Email" onChange={(e) => setFormFields({ ...formFields, email: e.target.value })} />
+                            placeholder="Email" onChange={(e) => setRegFields({ ...regFields, email: e.target.value })} />
                     </div>
-                    {formError.email.status && <p className="text-sm ml-12 mt-1 text-red-500">{formError.email.reason}</p>}
+                    {regErrors.email.status && <p className="text-sm ml-12 mt-1 text-red-500">{regErrors.email.reason}</p>}
                 </div>
                 <div>
                     <div className="flex items-center space-x-5">
                         <label htmlFor="password" className="cursor-pointer text-xl flex"><PiPassword className={"mr-2"} /></label>
                         <div className="relative">
                             <input id="password" type={hidePassword ? "password" : "text"} className="px-2 py-2 bg-secondary"
-                                placeholder="Password" onChange={(e) => setFormFields({ ...formFields, password: e.target.value })} />
+                                placeholder="Password" onChange={(e) => setRegFields({ ...regFields, password: e.target.value })} />
                             <span className="cursor-pointer absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2"
                                 onClick={() => setHidePassword(prev => !prev)}>{hidePassword ? <BsFillEyeSlashFill /> : <BsFillEyeFill />}</span>
                         </div>
                     </div>
-                    {formError.password.status && <p className="text-sm ml-12 mt-1 text-red-500 w-60">{formError.password.reason}</p>}
+                    {regErrors.password.status && <p className="text-sm ml-12 mt-1 text-red-500 w-60">{regErrors.password.reason}</p>}
                 </div>
 
                 {serverError && <p className="text-sm ml-12 mt-1 text-red-500 w-60">{serverError}</p>}

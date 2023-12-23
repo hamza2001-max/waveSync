@@ -67,15 +67,17 @@ export const register = async (
 
 export const login = (req: Request, res: Response) => {
   passport.authenticate("local", function (err: any, user: any, info: any) {
+    console.log("hellow");
+    
     if (err) {
       return res.status(500).json({ error: "Internal Server Error" });
     }
     if (!user) {
       return res.status(400).send({ message: info.message });
     }
-    res.cookie("userId", user.userId, { httpOnly: true });
     req.logIn(user, function () {
-      return res.status(200).json({ message: "Authentication successful." });
+      console.log(user.userId);
+      return res.cookie("userId", user.userId).status(200).json({ message: "Authentication successful." });
     });
   })(req, res);
 };

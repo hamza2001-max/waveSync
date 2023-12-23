@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 passport.serializeUser((user: any, done) => {
   console.log("Inside serialization");
   done(null, user.userId);
+  console.log("serial ", user);
 });
 
 passport.deserializeUser(async (userId: number, done) => {
@@ -23,11 +24,10 @@ passport.deserializeUser(async (userId: number, done) => {
 
 passport.use(
   new Strategy(
-    { usernameField: "email" },
+    { usernameField: "email", passwordField: "password" },
     async (email: string, password: string, done: any) => {
       try {
         const userExists = await prisma.user.findFirst({ where: { email } });
-        
         if (!userExists)
           return done(null, false, { message: "User doesn't exists." });
         const match = await bcrypt.compare(password, userExists.password);
