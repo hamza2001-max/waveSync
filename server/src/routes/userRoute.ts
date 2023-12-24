@@ -8,10 +8,7 @@ const userRouter = Router();
 // Testing
 userRouter.get("/getAllUsers", async (req, res) => {
   try {
-    // console.log("cookie", req.cookies);
-    // console.log("session", req.session);
     console.log("req.user ", req.user);
-    
     if (!req.user) {
       throw new Error("You are not authorized.");
     }

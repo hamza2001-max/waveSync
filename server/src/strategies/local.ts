@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 passport.serializeUser((user: any, done) => {
   console.log("Inside serialization");
   done(null, user.userId);
-  console.log("serial ", user);
+  // console.log("serial ", user);
 });
 
 passport.deserializeUser(async (userId: number, done) => {

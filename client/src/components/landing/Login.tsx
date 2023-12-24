@@ -17,6 +17,8 @@ export const Login = () => {
         status: false, reason: ""
     });
 
+
+
     const { mutate, isLoading } = useMutation({
         mutationFn: async () => {
             try {
@@ -32,7 +34,7 @@ export const Login = () => {
                 const userIdCookie = document.cookie.split('; ').find(cookie => cookie.startsWith('userId='))?.split('=')[1];
                 console.log(userIdCookie);
 
-                
+
                 console.log(response);
                 response && setServerError("");
             } catch (error) {
