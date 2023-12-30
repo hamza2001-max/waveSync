@@ -1,8 +1,9 @@
+import "../strategies/local";
 import { NextFunction, Request, Response } from "express";
 import { prisma } from "../utils/client";
 import validator from "validator";
-import passport from "passport";
 import bcrypt from "bcrypt";
+import passport from "passport";
 
 export const register = async (
   req: Request,
@@ -66,17 +67,21 @@ export const register = async (
 };
 
 export const login = (req: Request, res: Response) => {
+  if (req.cookies.email) {
+    return res.status(400).send({ message: "A user is already logged in." });
+  }
   passport.authenticate("local", function (err: any, user: any, info: any) {
     if (err) {
-      return res.status(500).json({ error: "Internal Server Error" });
+      return res.status(500).send({ error: "Internal Server Error." });
     }
     if (!user) {
       return res.status(400).send({ message: info.message });
     }
+    console.log(user);
+    
     req.logIn(user, function () {
-      console.log(user.userId);
       return res
-        .cookie("userId", user.userId, { sameSite: "none", secure: true })
+        .cookie("email", user.email, { sameSite: "none", secure: true })
         .status(200)
         .json({ message: "Authentication successful." });
     });

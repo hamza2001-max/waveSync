@@ -5,15 +5,14 @@ import bcrypt from "bcrypt";
 
 passport.serializeUser((user: any, done) => {
   console.log("Inside serialization");
-  done(null, user.userId);
-  // console.log("serial ", user);
+  done(null, user.email);
 });
 
-passport.deserializeUser(async (userId: number, done) => {
-  console.log("Inside deserialization");
+passport.deserializeUser(async (email: string, done) => {
+  console.log("Inside deserialization ", email);
   try {
     const userExists = await prisma.user.findFirst({
-      where: { userId: userId },
+      where: { email: email },
     });
     if (!userExists) throw new Error("User not found.");
     done(null, userExists);

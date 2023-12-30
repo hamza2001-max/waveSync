@@ -16,6 +16,6 @@ animation for models.
 - [ ] fix the profileImage in userController.test.ts
 
 {
-"email":"user1@gmail.com",
+  "email":"user1@gmail.com",
   "password": "ThePassword123$"
 }

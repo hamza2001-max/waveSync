@@ -54,7 +54,7 @@ export const Registeration = () => {
                 const response = await axios.post("http://localhost:7000/user/register", formdata, {
                     headers: {
                         "Content-Type": regFields.profileImage.name ? "multipart/form-data" : "text/html",
-                    }
+                    }, withCredentials: true
                 }).catch((error: AxiosError) => {
                     const errorMessage = error.response?.data as { message: string };
                     errorMessage && setServerError(errorMessage.message);

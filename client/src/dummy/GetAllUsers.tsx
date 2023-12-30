@@ -21,7 +21,7 @@ type UserData = {
         const response: AxiosResponse<UserData[]> = await axios.get("http://localhost:7000/user/getAllUsers", {
           withCredentials: true
         });
-        return response.data; // Return only the data from the Axios response
+        return response.data; 
       },
       { enabled: getEm }
     );

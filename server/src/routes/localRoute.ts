@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { login, logout, register } from "../controllers/userController";
+import { login, logout } from "../controllers/localController";
+import { register } from "../controllers/localController";
 import { upload } from "../utils/multer";
 import { prisma } from "../utils/client";
 
@@ -8,7 +9,6 @@ const userRouter = Router();
 // Testing
 userRouter.get("/getAllUsers", async (req, res) => {
   try {
-    console.log("req.user ", req.user);
     if (!req.user) {
       throw new Error("You are not authorized.");
     }
@@ -19,10 +19,10 @@ userRouter.get("/getAllUsers", async (req, res) => {
   }
 });
 
-// userRouter.delete("/deleteAllUsers", async (req, res) => {
-//   await prisma.user.deleteMany();
-//   res.sendStatus(200);
-// });
+userRouter.delete("/deleteAllUsers", async (req, res) => {
+  await prisma.user.deleteMany();
+  res.sendStatus(200);
+});
 // Testing
 
 userRouter.post("/register", upload.single("profileImage"), register, login);
