@@ -77,28 +77,35 @@ export const login = (req: Request, res: Response) => {
     if (!user) {
       return res.status(400).send({ message: info.message });
     }
-    console.log(user);
-    
+    const { userId, password, updatedAt, ...userData } = user;
+    const formatedData = {
+      ...userData,
+      createdAt: new Date(user.createdAt).toLocaleDateString(),
+    };
+
     req.logIn(user, function () {
       return res
         .cookie("email", user.email, { sameSite: "none", secure: true })
         .status(200)
-        .json({ message: "Authentication successful." });
+        .json({ message: "Authentication successful.", formatedData });
     });
   })(req, res);
 };
 
 export const logout = async (req: Request, res: Response) => {
+  console.log("logout req.user ", req.user);
+
   try {
     if (!req.user) throw new Error("User is not logged in.");
     req.logout(function (err) {
       if (err) throw new Error(err);
       req.session.destroy(function (err) {
         if (err) throw new Error(err);
-        res
-          .status(200)
-          .clearCookie("connect.sid", { path: "/" })
-          .send({ message: "Logged out successfully." });
+        const cookies = Object.keys(req.cookies);
+        cookies.forEach((cookieName) => {
+          res.clearCookie(cookieName, { path: "/" });
+        });
+        res.status(200).send({ message: "Logged out successfully." });
       });
     });
   } catch (error: any) {

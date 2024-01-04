@@ -4,7 +4,7 @@ import { Registeration } from './Registeration';
 export const Authorization = () => {
 
     const googleAuth = () => {
-        window.open("http://localhost:7000/auth/google");
+        window.location.href = "http://localhost:7000/auth/google";
     }
     return (
         <div className="flex flex-col items-center space-y-3 mb-10">

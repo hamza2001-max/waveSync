@@ -1,5 +1,6 @@
 import passport from "passport";
 import { OAuth2Strategy } from "passport-google-oauth";
+import { prisma } from "../utils/client";
 
 passport.serializeUser((user: any, done) => {
   done(null, user.emails[0].value);
@@ -17,8 +18,34 @@ passport.use(
       clientSecret: "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",
       callbackURL: "http://localhost:7000/auth/google/callback",
     },
-    (accessToken, refreshToken, profile, done) => {
-      return done(null, profile);
+    async (_, __, profile, done) => {
+      try {
+        const userExists = await prisma.user.findFirst({
+          where: { email: profile.emails && profile.emails[0].value },
+        });
+        if (userExists) {
+          return done(null, profile);
+        }
+        console.log(profile);
+        await prisma.user.create({
+          data: {
+            fullname: profile.displayName,
+            username:
+              profile.displayName.split(" ").join("") +
+              profile.id.substring(profile.id.length, -5),
+            email:
+              profile.emails && profile.emails[0]
+                ? profile.emails[0].value
+                : "",
+            password: profile.id,
+            profileImage: profile.photos ? profile.photos[0].value : null,
+          },
+        });
+        done(null, profile);
+      } catch (error) {
+        console.error("Error during Google authentication:", error);
+        return done(error, null);
+      }
     }
   )
 );

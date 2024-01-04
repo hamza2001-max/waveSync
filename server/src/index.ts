@@ -9,7 +9,6 @@ import session from "express-session";
 import pg from "pg";
 
 config();
-// import "./strategies/local";
 
 export const app = express();
 app.use(express.json());

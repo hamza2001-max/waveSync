@@ -5,6 +5,9 @@ import { useState } from "react";
 import { useMutation } from "react-query";
 import axios, { AxiosError } from "axios";
 import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
+import { IUseGetUser } from "../../hooks/useGetUser";
+import { useUserZus } from "../../store";
 
 export const Login = () => {
     const [hidePassword, setHidePassword] = useState(true);
@@ -16,8 +19,8 @@ export const Login = () => {
     const [loginErrors, setLoginErrors] = useState({
         status: false, reason: ""
     });
-
-
+    const navigate = useNavigate();
+    const setUser = useUserZus(state => state.setUser);
 
     const { mutate, isLoading } = useMutation({
         mutationFn: async () => {
@@ -30,13 +33,11 @@ export const Login = () => {
                     const errorMessage = error.response?.data as { message: string };
                     errorMessage && setServerError(errorMessage.message);
                 });
-
-                const userIdCookie = document.cookie.split('; ').find(cookie => cookie.startsWith('userId='))?.split('=')[1];
-                console.log(userIdCookie);
-
-
-                console.log(response);
-                response && setServerError("");
+                if (response && response.data) {
+                    const responseData: IUseGetUser = response.data;
+                    setUser(responseData.formatedData);
+                    response && setServerError("");
+                }
             } catch (error) {
                 console.log(error, " in the try/catch block of login useMutation.");
             }
@@ -56,6 +57,7 @@ export const Login = () => {
         if (!emailError.status) {
             mutate();
             setLoginErrors({ status: false, reason: "" });
+            navigate("/");
         } else {
             setLoginErrors(emailError);
         }
