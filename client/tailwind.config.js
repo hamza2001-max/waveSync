@@ -9,6 +9,9 @@ export default {
         primary: "var(--color-primary)",
         secondary: "var(--color-secondary)",
       },
+      screens: {
+        'xs': '450px'
+      }
     },
   },
   plugins: [],

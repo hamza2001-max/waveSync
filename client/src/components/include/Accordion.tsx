@@ -4,7 +4,7 @@ import { cn } from "../../utils/cn";
 
 export const Accordion = ({ title, children, bodyVisible, onClick }: IAccordian) => {
     return (
-        <div className={cn("w-[23rem] sm:w-[27rem] md:w-[22rem] border-[1.2px] border-primary rounded-lg",
+        <div className={cn("w-[18rem] xs:w-[20rem] md:w-[22rem] border-[1.2px] border-primary rounded-lg",
             { "space-y-2": bodyVisible })}>
             <div className="group flex justify-between items-center cursor-pointer px-5 py-3"
                 onClick={() => { onClick(); }}>

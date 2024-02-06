@@ -17,7 +17,7 @@ const Modal = ({ clickable, children, className }: IModal) => {
               className="fixed top-0 left-0 w-full bg-primary h-full opacity-50"
               onClick={closeModal}
             ></div>
-            <div className="relative w-96 sm:w-[26rem] bg-secondary text-primary rounded-md shadow-m z-50">
+            <div className="relative w-[18rem] sm:w-[26rem] bg-secondary text-primary rounded-md shadow-m z-50">
               {children}
             </div>
           </div>

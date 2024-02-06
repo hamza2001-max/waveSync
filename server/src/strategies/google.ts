@@ -3,7 +3,7 @@ import { OAuth2Strategy } from "passport-google-oauth";
 import { prisma } from "../utils/client";
 
 passport.serializeUser((user: any, done) => {
-  done(null, user.emails[0].value);
+  done(null, user.email);
 });
 
 passport.deserializeUser((user: any, done) => {
@@ -16,7 +16,7 @@ passport.use(
       clientID:
         "19915083809-9fravib32pbrnih0gp4apct5rqkumcgg.apps.googleusercontent.com",
       clientSecret: "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",
-      callbackURL: "http://localhost:7000/auth/google/callback",
+      callbackURL: "http://localhost:8500/auth/google/callback",
     },
     async (_, __, profile, done) => {
       try {
@@ -24,10 +24,10 @@ passport.use(
           where: { email: profile.emails && profile.emails[0].value },
         });
         if (userExists) {
-          return done(null, profile);
+          return done(null, userExists);
         }
         console.log(profile);
-        await prisma.user.create({
+        const createUser = await prisma.user.create({
           data: {
             fullname: profile.displayName,
             username:
@@ -41,7 +41,7 @@ passport.use(
             profileImage: profile.photos ? profile.photos[0].value : null,
           },
         });
-        done(null, profile);
+        done(null, createUser);
       } catch (error) {
         console.error("Error during Google authentication:", error);
         return done(error, null);

@@ -10,7 +10,9 @@ import { FiTrash2 } from "react-icons/fi";
 import { useMutation } from "react-query";
 import Modal from "../include/Modal"
 import axios, { AxiosError } from "axios";
-
+import { useUserZus } from "../../store";
+import { IUserRes } from "../../types";
+import { useNavigate } from "react-router-dom";
 export const Registeration = () => {
     const [hidePassword, setHidePassword] = useState(true);
     const [imgPreview, setImgPreview] = useState<string | null>(null);
@@ -27,7 +29,9 @@ export const Registeration = () => {
         email: { status: false, reason: "" },
         password: { status: false, reason: "" }
     });
+    const navigate = useNavigate();
     const [serverError, setServerError] = useState("");
+    const setUserZus = useUserZus(state => state.setUser);
 
     const handleImgPreview = (e: ChangeEvent<HTMLInputElement>) => {
         setImgPreview(null);
@@ -51,7 +55,7 @@ export const Registeration = () => {
                 formdata.append('username', regFields.username);
                 formdata.append('email', regFields.email);
                 formdata.append('password', regFields.password);
-                const response = await axios.post("http://localhost:7000/user/register", formdata, {
+                const response = await axios.post("http://localhost:8500/user/register", formdata, {
                     headers: {
                         "Content-Type": regFields.profileImage.name ? "multipart/form-data" : "text/html",
                     }, withCredentials: true
@@ -60,7 +64,11 @@ export const Registeration = () => {
                     errorMessage && setServerError(errorMessage.message);
                 });
                 console.log(response);
-                response && setServerError("");
+                if (response && response.data) {
+                    setServerError("");
+                    const responseData: IUserRes = response.data;
+                    setUserZus(responseData.formatedData);
+                }
             } catch (error) {
                 console.log(error, " in the try/catch block of registeration useMutation.");
             }
@@ -90,7 +98,7 @@ export const Registeration = () => {
             },
             password: {
                 status: !regFields.password || !isPasswordValid,
-                reason: !regFields.password ? "Fill out the password field." : !isPasswordValid ? "Password must be at least 4 characters with at least one uppercase and one lowercase letter." : ""
+                reason: !regFields.password ? "Fill out the password field." : !isPasswordValid ? "Password must be at least 4 characters with at least one uppercase, one lowercase letter and one special character." : ""
             },
         };
 
@@ -111,6 +119,7 @@ export const Registeration = () => {
                 email: { status: false, reason: "" },
                 password: { status: false, reason: "" }
             });
+            navigate("/");
         } else {
             setRegErrors(errors);
         }
@@ -119,9 +128,9 @@ export const Registeration = () => {
     return (
         <Modal
             clickable="Create An Account"
-            className="w-full py-[0.6rem] border-[1px] border-primary rounded-3xl inverse">
+            className="w-[18rem] xs:w-[20rem] py-[0.6rem] border-[1px] border-primary rounded-3xl inverse">
             <form onSubmit={handleSubmition} className="flex flex-col items-center space-y-4 py-8 px-7">
-                <h2 className="mb-3 font-semibold">Join Us By Creating An Account.</h2>
+                <h2 className="mb-3 font-semibold">Create an account.</h2>
                 <div className="flex flex-col items-center justify-center space-y-2">
                     <label htmlFor="imgInput"
                         className={cn("cursor-pointer text-3xl h-24 w-24 flex flex-col space-y-2 justify-center items-center", {
@@ -141,7 +150,7 @@ export const Registeration = () => {
                         name="profileImage"
                         accept="image/*"
                         onChange={handleImgPreview} />
-                    {!imgPreview ? <label className="cursor-pointer text-lg font-semibold" htmlFor="imgInput">Profile Picture</label> :
+                    {imgPreview &&
                         <span
                             className="text-sm font-semibold flex items-center cursor-pointer"
                             onClick={() => {
@@ -152,35 +161,34 @@ export const Registeration = () => {
                     }
                 </div>
                 <div>
-                    <div className="flex items-center space-x-5">
+                    <div className="flex items-center space-x-2 sm:space-x-5">
                         <label htmlFor="fName" className="cursor-pointer text-xl flex"><AiOutlineUser className={"mr-2"} /></label>
-                        <input id="fName" type="text" className="px-2 py-2 bg-secondary"
+                        <input id="fName" type="text" className="px-2 py-2 bg-secondary w-[14rem]"
                             placeholder="Full Name" onChange={(e) => setRegFields({ ...regFields, fullname: e.target.value })} />
                     </div>
                     {regErrors.fullname.status && <p className="text-sm ml-12 mt-1 text-red-500">{regErrors.fullname.reason}</p>}
                 </div>
                 <div>
-                    <div className="flex items-center space-x-5">
+                    <div className="flex items-center space-x-2 sm:space-x-5">
                         <label htmlFor="uName" className="cursor-pointer text-xl flex"><BiSolidUserAccount className={"mr-2"} /></label>
-                        <input id="uName" type="text" className="px-2 py-2 bg-secondary"
+                        <input id="uName" type="text" className="px-2 py-2 bg-secondary w-[14rem]"
                             placeholder="Username" onChange={(e) => setRegFields({ ...regFields, username: e.target.value })} />
-
                     </div>
                     {regErrors.username.status && <p className="text-sm ml-12 mt-1 text-red-500">{regErrors.username.reason}</p>}
                 </div>
                 <div>
-                    <div className="flex items-center space-x-5">
+                    <div className="flex items-center space-x-2 sm:space-x-5">
                         <label htmlFor="email" className="cursor-pointer text-xl flex"><MdOutlineEmail className={"mr-2"} /></label>
-                        <input id="email" type="email" className="px-2 py-2 bg-secondary"
+                        <input id="email" type="email" className="px-2 py-2 bg-secondary w-[14rem]"
                             placeholder="Email" onChange={(e) => setRegFields({ ...regFields, email: e.target.value })} />
                     </div>
                     {regErrors.email.status && <p className="text-sm ml-12 mt-1 text-red-500">{regErrors.email.reason}</p>}
                 </div>
                 <div>
-                    <div className="flex items-center space-x-5">
+                    <div className="flex items-center space-x-2 sm:space-x-5">
                         <label htmlFor="password" className="cursor-pointer text-xl flex"><PiPassword className={"mr-2"} /></label>
                         <div className="relative">
-                            <input id="password" type={hidePassword ? "password" : "text"} className="px-2 py-2 bg-secondary"
+                            <input id="password" type={hidePassword ? "password" : "text"} className="px-2 py-2 bg-secondary w-[14rem]"
                                 placeholder="Password" onChange={(e) => setRegFields({ ...regFields, password: e.target.value })} />
                             <span className="cursor-pointer absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2"
                                 onClick={() => setHidePassword(prev => !prev)}>{hidePassword ? <BsFillEyeSlashFill /> : <BsFillEyeFill />}</span>
@@ -190,7 +198,7 @@ export const Registeration = () => {
                 </div>
 
                 {serverError && <p className="text-sm ml-12 mt-1 text-red-500 w-60">{serverError}</p>}
-                <button type="submit" className="w-[19rem] py-[0.5rem] border-[1.5px] border-primary rounded-3xl inverse"
+                <button type="submit" className="w-[16rem] py-[0.5rem] border-[1.5px] border-primary rounded-3xl inverse"
                     style={{
                         marginTop: "1.2rem"
                     }}>{isLoading ? "..." : "Submit"}</button>

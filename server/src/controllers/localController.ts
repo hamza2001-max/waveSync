@@ -5,14 +5,9 @@ import validator from "validator";
 import bcrypt from "bcrypt";
 import passport from "passport";
 
-export const register = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { fullname, username, email, password } = req.body;
-
+    const { fullname, username, email, password:pwd } = req.body;
     if (!validator.isEmail(email)) {
       throw new Error("Provide a valid email.");
     }
@@ -23,7 +18,7 @@ export const register = async (
       throw new Error("Full Name is not of required length (4-15).");
     }
     if (
-      !validator.isStrongPassword(password, {
+      !validator.isStrongPassword(pwd, {
         minLength: 4,
         minLowercase: 1,
         minUppercase: 1,
@@ -46,9 +41,9 @@ export const register = async (
       throw new Error("The username is taken.");
 
     const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(password, salt);
+    const hash = await bcrypt.hash(pwd, salt);
 
-    await prisma.user.create({
+    const createUser = await prisma.user.create({
       data: {
         email,
         fullname,
@@ -59,6 +54,19 @@ export const register = async (
           create: [{ name: "client" }],
         },
       },
+    });
+
+    const { userId, password, updatedAt, ...userData } = createUser;
+    const formatedData = {
+      ...userData,
+      createdAt: new Date(createUser.createdAt).toLocaleDateString(),
+    };
+
+    req.logIn(createUser, function () {
+      return res
+        .cookie("email", createUser.email, { sameSite: "none", secure: true })
+        .status(200)
+        .json({ message: "Registeration successfull.", formatedData });
     });
     next();
   } catch (error: any) {
@@ -87,7 +95,7 @@ export const login = (req: Request, res: Response) => {
       return res
         .cookie("email", user.email, { sameSite: "none", secure: true })
         .status(200)
-        .json({ message: "Authentication successful.", formatedData });
+        .json({ message: "Authentication successfull.", formatedData });
     });
   })(req, res);
 };
