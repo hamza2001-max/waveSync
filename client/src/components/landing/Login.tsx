@@ -25,7 +25,7 @@ export const Login = () => {
     const { mutate, isLoading } = useMutation({
         mutationFn: async () => {
             try {
-                const response = await axios.post("http://localhost:8500/user/login", loginFields, {
+                const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/login`, loginFields, {
                     headers: {
                         "Content-Type": "application/json",
                     }, withCredentials: true

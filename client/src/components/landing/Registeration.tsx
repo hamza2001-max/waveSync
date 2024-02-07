@@ -55,7 +55,7 @@ export const Registeration = () => {
                 formdata.append('username', regFields.username);
                 formdata.append('email', regFields.email);
                 formdata.append('password', regFields.password);
-                const response = await axios.post("http://localhost:8500/user/register", formdata, {
+                const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/register`, formdata, {
                     headers: {
                         "Content-Type": regFields.profileImage.name ? "multipart/form-data" : "text/html",
                     }, withCredentials: true

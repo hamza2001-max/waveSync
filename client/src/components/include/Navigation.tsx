@@ -20,15 +20,14 @@ export const Navigation = () => {
   const { mutate } = useMutation({
     mutationFn: async () => {
       try {
-        const response = await axios.get("http://localhost:8500/user/logout", {
+        await axios.get(`${import.meta.env.VITE_BASE_URL}/user/logout`, {
           withCredentials: true
         }).then(() => {
           useUserZus.persist.clearStorage();
         }).catch(error => {
           const errorMessage = error.response?.data as { message: string };
-          console.log(errorMessage);
+          throw new Error(errorMessage.message);
         });
-        console.log(response);
       } catch (error) {
         console.log(error);
       }

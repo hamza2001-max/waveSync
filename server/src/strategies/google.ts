@@ -16,7 +16,7 @@ passport.use(
       clientID:
         "19915083809-9fravib32pbrnih0gp4apct5rqkumcgg.apps.googleusercontent.com",
       clientSecret: "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",
-      callbackURL: "http://localhost:8500/auth/google/callback",
+      callbackURL: `http://localhost:${process.env.PORT}/auth/google/callback`,
     },
     async (_, __, profile, done) => {
       try {

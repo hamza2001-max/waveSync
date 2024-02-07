@@ -1,7 +1,6 @@
 import { IAccordian } from "../../types"
 import { FaAngleDown } from "react-icons/fa6"
 import { cn } from "../../utils/cn";
-
 export const Accordion = ({ title, children, bodyVisible, onClick }: IAccordian) => {
     return (
         <div className={cn("w-[18rem] xs:w-[20rem] md:w-[22rem] border-[1.2px] border-primary rounded-lg",

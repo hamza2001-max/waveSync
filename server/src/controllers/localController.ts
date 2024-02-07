@@ -68,7 +68,6 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         .status(200)
         .json({ message: "Registeration successfull.", formatedData });
     });
-    next();
   } catch (error: any) {
     res.status(409).send({ message: error.message });
   }
